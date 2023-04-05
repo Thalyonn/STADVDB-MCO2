@@ -3,19 +3,7 @@ require('dotenv').config()
 const express = require('express');
 const mysql = require('mysql');
 const movieRoutes = require('./routes/movieRoutes');
-
-const db = mysql.createConnection({
-    host : process.env.SQL_HOST,
-    user : process.env.SQL_USERNAME,
-    password : process.env.SQL_PASSWORD,
-});
-
-db.connect((err) => {
-    if(err){
-        throw err;
-    }
-    console.log('MySql connected');
-});
+const db = require('./models/db.js')
 
 const app = express();
 app.set('view engine', 'ejs');
