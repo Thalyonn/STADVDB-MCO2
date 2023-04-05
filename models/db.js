@@ -7,12 +7,21 @@ const db = mysql.createConnection({
 });
 
 const database = {
-	db.connect((err) => {
-		if(err){
-			throw err;
-		}
-		console.log('MySql connected');
-	});
+	connect: function() {
+		db.connect((err) => {
+			if(err){
+				throw err;
+			}
+			console.log('MySql connected');
+		});
+	},
+
+	selectAllFromNode: function() {
+		db.query("SELECT * FROM node", (err, result, fields) => {
+			if(err) throw err;
+			return result;
+		})
+	}
 }
 
 export default database
