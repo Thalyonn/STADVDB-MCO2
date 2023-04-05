@@ -1,11 +1,13 @@
+require('dotenv').config()
+
 const express = require('express');
 const mysql = require('mysql');
 const movieRoutes = require('./routes/movieRoutes');
 
 const db = mysql.createConnection({
-    host : 'localhost',
-    user : 'root',
-    password : '',
+    host : process.env.SQL_HOST,
+    user : process.env.SQL_USERNAME,
+    password : process.env.SQL_PASSWORD,
     database : ''
 });
 
