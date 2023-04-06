@@ -58,6 +58,13 @@ const database = {
 			console.log(result.affectedRows + " row(s) updated");
 		})
 	},
+
+	beginTransaction: function() {
+		db.query("BEGIN TRANSACTION", (err, result) => {
+			if(err) throw err;
+			console.log("New transaction started");
+		})
+	},
 	
 	commitTransaction: function() {
 		db.query("COMMIT", (err,result) => {
