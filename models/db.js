@@ -23,17 +23,35 @@ const database = {
 	*/ 
 
 	selectAll: function() {
-		db.query("SELECT * FROM node", (err, result, fields) => {
-			if(err) throw err;
-			return result;
+		db.getConnection()
+		.then((connection) => {
+			return connection.query(start_transac)
+		})
+		.then(() => {
+			connection.query("SELECT * FROM node", (err, result, fields) => {
+				if(err) throw err;
+				return result;
+			})
+		})
+		.then(() => {
+			return connection.query("COMMIT")
 		})
 	},
 
 	selectYearRange: function(start, end) {
-		db.query("SELECT * FROM node WHERE year BETWEEN " + start " AND " + end, (err, result, fields) => {
-			if(err) throw err;
-			return result;
-		}
+		db.getConnection()
+		.then((connection) => {
+			return connection.query(start_transac)
+		})
+		.then(() => {
+			connection.query("SELECT * FROM node WHERE year BETWEEN " + start " AND " + end, (err, result, fields) => {
+				if(err) throw err;
+				return result;
+			}
+		})
+		.then(() => {
+			return connection.query("COMMIT")
+		})
 	},
 
 	insertOne: function(name, year, rating, genres) {
@@ -68,23 +86,18 @@ const database = {
 	},
 
 	updateOne: function(id, field, value) {
-		db.query("UPDATE node SET '" + field + "' = '" + value + "' WHERE id = " + id, (err, result) => {
-			if(err) throw err;
-			console.log(result.affectedRows + " row(s) updated");
+		db.getConnection()
+		.then((connection) => {
+			return connection.query(start_transac)
 		})
-	},
-
-	beginTransaction: function() {
-		db.query("BEGIN TRANSACTION", (err, result) => {
-			if(err) throw err;
-			console.log("New transaction started");
+		.then(() => {
+			connection.query("UPDATE node SET '" + field + "' = '" + value + "' WHERE id = " + id, (err, result) => {
+				if(err) throw err;
+				console.log(result.affectedRows + " row(s) updated");
+			})
 		})
-	},
-	
-	commitTransaction: function() {
-		db.query("COMMIT", (err,result) => {
-			if(err) throw err;
-			console.log("Transaction committed"); //TODO: maybe show an ID?
+		.then(() => {
+			return connection.query("COMMIT")
 		})
 	},
 
