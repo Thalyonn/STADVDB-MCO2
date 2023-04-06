@@ -1,6 +1,7 @@
 mysql = require("mysql");
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
+	connectionLimit: process.env.SQL_CONNLIMIT,
 	host : process.env.SQL_HOST,
 	user : process.env.SQL_USERNAME,
 	password : process.env.SQL_PASSWORD,
@@ -8,6 +9,7 @@ const db = mysql.createConnection({
 });
 
 const database = {
+	/*
 	connect: function() {
 		db.connect((err) => {
 			if(err){
@@ -16,6 +18,7 @@ const database = {
 			console.log('MySql connected');
 		});
 	},
+	*/ 
 
 	selectAll: function() {
 		db.query("SELECT * FROM node", (err, result, fields) => {
