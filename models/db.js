@@ -24,6 +24,13 @@ const database = {
 		})
 	},
 
+	selectYearRange: function(start, end) {
+		db.query("SELECT * FROM node WHERE year BETWEEN " + start " AND " + end, (err, result, fields) => {
+			if(err) throw err;
+			return result;
+		}
+	},
+
 	insertOne: function(name, year, rating, genres) {
 		if(genres.isArray()){
 			count = 0;
