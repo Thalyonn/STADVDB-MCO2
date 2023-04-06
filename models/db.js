@@ -59,6 +59,13 @@ const database = {
 		})
 	},
 	
+	commitTransaction: function() {
+		db.query("COMMIT", (err,result) => {
+			if(err) throw err;
+			console.log("Transaction committed"); //TODO: maybe show an ID?
+		})
+	},
+
 	rollback: function() {
 		db.query("ROLLBACK", (err, result) => {
 			if(err) throw err;
