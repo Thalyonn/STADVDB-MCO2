@@ -8,6 +8,8 @@ const db = mysql.createPool({
 	databse: process.env.SQL_DATABSE
 });
 
+const start_transac = "BEGIN"
+
 const database = {
 	/*
 	connect: function() {
@@ -35,24 +37,34 @@ const database = {
 	},
 
 	insertOne: function(name, year, rating, genres) {
-		if(genres.isArray()){
-			count = 0;
-			//insert a row for each genre
-			for (i in genres) {
-				db.query("INSERT INTO node (name, year, rating, genre) VALUES ('" + name + "', '" + year + "', '" + rating + "', '" + i + "')", 
+		db.getConnection()
+		.then((connection) => {
+			return connection.query(start_transac)
+		})
+		.then(() => {
+			if(genres.isArray()){
+				count = 0;
+				//insert a row for each genre
+				for (i in genres) {
+					connection.query("INSERT INTO node (name, year, rating, genre) VALUES ('" + name + "', '" + year + "', '" + rating + "', '" + i + "')", 
+						(err, result) => {
+							if(err) throw err;
+							count++;
+					});
+				}
+				console.log("Inserted " + count + " rows");
+			}
+			else {
+				connection.query("INSERT INTO node (name, year, rating, genre) VALUES ('" + name + "', '" + year + "', '" + rating + "', '" + genres + "')",
 					(err, result) => {
-						if(err) throw err;
-						count++;
+					if(err) throw err;
+					console.log("Inserted a row");
 				});
 			}
-			console.log("Inserted " + count + " rows");
-		}
-		else {
-			db.query("INSERT INTO node (name, year, rating, genre) VALUES ('" + name + "', '" + year + "', '" + rating + "', '" + genres + "')", (err, result) => {
-				if(err) throw err;
-				console.log("Inserted a row");
-			});
-		}
+		})
+		.then({} => {
+			return connection.query("COMMIT")
+		})
 	},
 
 	updateOne: function(id, field, value) {
