@@ -50,6 +50,13 @@ const database = {
 			if(err) throw err;
 			console.log(result.affectedRows + " row(s) updated");
 		})
+	},
+	
+	rollback: function() {
+		db.query("ROLLBACK", (err, result) => {
+			if(err) throw err;
+			console.log("Rolled back to last commit");
+		})
 	}
 }
 
