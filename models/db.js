@@ -10,7 +10,7 @@ const db = mysql.createPool({
 
 const start_transac = "BEGIN"
 
-const database = {
+export const database = {
 	/*
 	connect: function() {
 		db.connect((err) => {
@@ -108,5 +108,3 @@ const database = {
 		})
 	}
 }
-
-export default database
