@@ -6,9 +6,10 @@ const movieRoutes = require('./routes/movieRoutes');
 const db = require('./models/db.js')
 
 const app = express();
+const PORT = 3000 || process.env.PORT;
 app.set('view engine', 'ejs');
-app.listen(process.env.PORT, () => {
-    console.log("Server started on port " + process.env.PORT);
+app.listen(PORT, () => {
+    console.log("Server started on port " + PORT);
 });
 
 // movie routes
