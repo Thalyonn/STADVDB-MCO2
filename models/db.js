@@ -80,7 +80,7 @@ const database = {
 				});
 			}
 		})
-		.then({} => {
+		.then(() => {
 			return connection.query("COMMIT")
 		})
 	},
