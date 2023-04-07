@@ -44,7 +44,7 @@ const database = {
 			return connection.query(start_transac)
 		})
 		.then(() => {
-			connection.query("SELECT * FROM node WHERE year BETWEEN " + start " AND " + end, (err, result, fields) => {
+			connection.query("SELECT * FROM node WHERE year BETWEEN " + start + " AND " + end, (err, result, fields) => {
 				if(err) throw err;
 				return result;
 			}
