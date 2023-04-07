@@ -1,7 +1,12 @@
-const home = (req, res) => {
-  res.render('index');
-}
 
-module.exports = {
-  home
+
+const controller = {
+  homeView: function (req, res){
+    res.render('index');
+  },
+  insertMovie: function (req, res){
+    res.render('insertMovie');
+  }
+  
 }
+module.exports = controller
