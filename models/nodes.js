@@ -22,4 +22,4 @@ const node_slave2 = mysql.createPool({
 	database: process.env.SQL_DATABASE2
 });
 
-module.exports = { node0, node1, node2 };
+module.exports = { node_master, node_slave1, node_slave2 };
