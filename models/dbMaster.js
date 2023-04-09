@@ -1,16 +1,10 @@
 mysql = require("mysql");
 
-const db = mysql.createPool({
-	connectionLimit: process.env.SQL_CONNLIMIT,
-	host : process.env.SQL_HOST,
-	user : process.env.SQL_USERNAME,
-	password : process.env.SQL_PASSWORD,
-	database: process.env.SQL_DATABSE
-});
+const { node0 } = require('nodes')
 
 const start_transac = "BEGIN"
 
-const database = {
+const dbMaster = {
 	/*
 	connect: function() {
 		db.connect((err) => {
@@ -23,7 +17,7 @@ const database = {
 	*/ 
 
 	selectAll: function() {
-		db.getConnection()
+		node0.getConnection()
 		.then((connection) => {
 			return connection.query(start_transac)
 		})
@@ -39,7 +33,7 @@ const database = {
 	},
 
 	selectYearRange: function(start, end) {
-		db.getConnection()
+		node0.getConnection()
 		.then((connection) => {
 			return connection.query(start_transac)
 		})
@@ -55,7 +49,7 @@ const database = {
 	},
 
 	insertOne: function(name, year, rating, genres) {
-		db.getConnection()
+		node0.getConnection()
 		.then((connection) => {
 			return connection.query(start_transac)
 		})
@@ -86,7 +80,7 @@ const database = {
 	},
 
 	updateOne: function(id, field, value) {
-		db.getConnection()
+		node0.getConnection()
 		.then((connection) => {
 			return connection.query(start_transac)
 		})
@@ -102,11 +96,11 @@ const database = {
 	},
 
 	rollback: function() {
-		db.query("ROLLBACK", (err, result) => {
+		node0.query("ROLLBACK", (err, result) => {
 			if(err) throw err;
 			console.log("Rolled back to last commit");
 		})
 	}
 }
 
-module.exports = database;
+module.exports = dbMaster;
