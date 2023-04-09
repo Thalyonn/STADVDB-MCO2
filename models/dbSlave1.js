@@ -1,6 +1,6 @@
 mysql = require("mysql");
 
-const { node1 } = require('nodes')
+const { node1 } = require('./nodes')
 
 const start_transac = "BEGIN"
 

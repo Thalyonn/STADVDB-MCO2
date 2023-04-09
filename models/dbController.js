@@ -1,7 +1,7 @@
 // performs routing of nodes depending on the year of the movie
-const dbMaster = requ
-const dbSlave1 = require()
-const dbSlave2 = require()
+const dbMaster = require('./dbMaster');
+const dbSlave1 = require('./dbSlave1');
+const dbSlave2 = require('./dbSlave2');
 
 const dbController = {
   insertMovie: function(name, year, rating, genre) {
