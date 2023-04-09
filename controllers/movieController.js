@@ -1,5 +1,5 @@
 const movieDB = require("../models/db.js")
-const db = require('../models/dbController')
+const db = require('../models/dbController.js')
 const { isValidRating } = require('../helpers/validation')
 
 const controller = {
