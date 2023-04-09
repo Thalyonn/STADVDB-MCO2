@@ -1,23 +1,13 @@
 mysql = require("mysql2");
 
-const db = mysql.createPool({
-	host : process.env.SQL_HOST,
-	user : process.env.SQL_USERNAME,
-	password : process.env.SQL_PASSWORD,
-	database: process.env.SQL_DATABASE,
-	waitForConnections: true,
-  	connectionLimit: 10,
-  	maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
-  	idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
-  	queueLimit: 0
-});
+nodes = require("./nodes.js");
 
 const start_transac = "BEGIN"
 
 const database = {
 	/*
 	connect: function() {
-		db.connect((err) => {
+		node.connect((err) => {
 			if(err){
 				throw err;
 			}
@@ -26,8 +16,8 @@ const database = {
 	},
 	*/ 
 
-	selectAll: function() {
-		db.getConnection()
+	selectAll: function(node) {
+		node.getConnection()
 		.then((connection) => {
 			return connection.query(start_transac)
 		})
@@ -41,16 +31,16 @@ const database = {
 			return connection.query("COMMIT")
 		})
 	},
-	selectMovie: async function(){
-		const promisePool = db.promise();
+	selectMovie: async function(node){
+		const promisePool = node.promise();
 		const [result,field ] = await promisePool.query("SELECT * FROM node");
-		db.end();
+		node.end();
 		console.log(result)
 		return result
 	},
 
-	selectYearRange: function(start, end) {
-		db.getConnection()
+	selectYearRange: function(node, start, end) {
+		node.getConnection()
 		.then((connection) => {
 			return connection.query(start_transac)
 		})
@@ -65,8 +55,8 @@ const database = {
 		})
 	},
 
-	insertOne: function(name, year, rating, genres) {
-		db.getConnection()
+	insertOne: function(node, name, year, rating, genres) {
+		node.getConnection()
 		.then((connection) => {
 			return connection.query(start_transac)
 		})
@@ -96,8 +86,8 @@ const database = {
 		})
 	},
 
-	updateOne: function(id, field, value) {
-		db.getConnection()
+	updateOne: function(node, id, field, value) {
+		node.getConnection()
 		.then((connection) => {
 			return connection.query(start_transac)
 		})
@@ -112,8 +102,8 @@ const database = {
 		})
 	},
 
-	rollback: function() {
-		db.query("ROLLBACK", (err, result) => {
+	rollback: function(node) {
+		node.query("ROLLBACK", (err, result) => {
 			if(err) throw err;
 			console.log("Rolled back to last commit");
 		})
