@@ -23,7 +23,7 @@ const controller = {
     const rating = req.body.rating;
     const genre = req.body.genre;
 
-    // db.insertMovie(name, year, rating, genre);
+    db.insertMovie(name, year, rating, genre);
     req.flash('success_msg', 'Movie successfully created!');
     res.redirect('/');
   }
