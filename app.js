@@ -10,7 +10,6 @@ const movieRoutes = require('./routes/movieRoutes');
 
 
 const app = express();
-const PORT = 80;
 app.use(bodyParser.urlencoded({extended: false}));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -27,8 +26,8 @@ app.use(session({
 
 app.use(flash());
 
-app.listen(PORT, () => {
-    console.log("Server started on port "+ PORT);
+app.listen(proccess.env.PORT, () => {
+    console.log("Server started on port "+ process.env.PORT);
 });
 
 // movie routes
