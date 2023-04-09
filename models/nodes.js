@@ -1,4 +1,4 @@
-const node0 = mysql.createPool({
+const node_master = mysql.createPool({
 	connectionLimit: process.env.SQL_CONNLIMIT,
 	host : process.env.SQL_HOST0,
 	user : process.env.SQL_USERNAME0,
@@ -6,7 +6,7 @@ const node0 = mysql.createPool({
 	database: process.env.SQL_DATABASE0
 });
 
-const node1 = mysql.createPool({
+const node_slave1 = mysql.createPool({
 	connectionLimit: process.env.SQL_CONNLIMIT,
 	host : process.env.SQL_HOST1,
 	user : process.env.SQL_USERNAME1,
@@ -14,7 +14,7 @@ const node1 = mysql.createPool({
 	database: process.env.SQL_DATABASE1
 });
 
-const node2 = mysql.createPool({
+const node_slave2 = mysql.createPool({
 	connectionLimit: process.env.SQL_CONNLIMIT,
 	host : process.env.SQL_HOST2,
 	user : process.env.SQL_USERNAME2,
