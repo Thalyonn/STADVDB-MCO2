@@ -2,6 +2,11 @@ nodes = require("./nodes.js")
 db = require("./db.js")
 // performs routing of nodes depending on the year of the movie
 const dbController = {
+  queryAllMovies: async function() {
+    const result = await db.selectAll(nodes.node_master);
+    return await result;
+  },
+
   insertMovie: function(name, year, rating, genre) {
     // if movie is released before 1980
     if (year < 1980) {

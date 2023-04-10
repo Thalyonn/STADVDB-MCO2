@@ -18,13 +18,12 @@ const database = {
 		const promisePool = node.promise();
 		try {
 			await promisePool.query(start_transac);
-			const [results, fields] = await promisePool.query("SELECT * FROM node")
+			const [results, fields] = await promisePool.query("SELECT * FROM node LIMIT 10")
 			await promisePool.query("COMMIT");
+			return results;
 		} catch (e) {
 			console.error(e);
 		}
-
-		return results;
 	},
 
 	/*

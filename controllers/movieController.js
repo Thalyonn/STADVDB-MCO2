@@ -1,13 +1,12 @@
 const movieDB = require("../models/db.js")
-const db = require('../models/dbController.js')
+const db = require('../models/dbController')
 const { isValidRating } = require('../helpers/validation')
 
 const controller = {
-  homeView: function (req, res){
-    // result = movieDB.selectMovie()
-    // console.log(result)
-  const success_msg = req.flash('success_msg')
-  res.render('index', { success_msg });
+  homeView: async function (req, res) {
+    const success_msg = req.flash('success_msg');
+    const result = await db.queryAllMovies();
+    res.render('index', { success_msg, movies: result });
   },
 
   insertMovie: function (req, res){

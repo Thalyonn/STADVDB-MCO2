@@ -34,22 +34,26 @@
             <tr class="table-dark">
               <th scope="col">Movie Name</th>
               <th scope="col">Year</th>
+              <th scope="col">Rating</th>
+              <th scope="col">Genre</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="">
-              <td>Avengers Infinity War</td>
-              <td>2019</td>
-              <td>
-                <a href="" class="text-sucess"><i class="fas fa-book fa-lg mx-1"></i></a>
-              </td>
-            </tr>
-            <tr class="">
-              <td scope="row">Item</td>
-              <td>Item</td>
-              <td>Item</td>
-            </tr>
+          <% if (movies.length > 0) { %>
+            <% movies.forEach(movie => { %>
+              <tr class="">
+                <td><%= movie.name %></td>
+                <td><%= movie.year %></td>
+                <td><%= movie.rating %></td>
+                <td><%= movie.genre %></td>
+                <td>
+                  <a href="" class="text-sucess"><i class="fas fa-book fa-lg mx-1"></i></a>
+                </td>
+
+              </tr>
+            <% }) %>
+          <% } %>
           </tbody>
         </table>
       </div>
