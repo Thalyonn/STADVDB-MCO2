@@ -42,7 +42,7 @@ const database = {
 			await promisePool.query(start_transac);
 			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE year BETWEEN " + start + " AND " + end)
 			await promisePool.query("COMMIT");
-		} catch e() {
+		} catch (e) {;
 			console.error(e);
 		}
 		return results;
