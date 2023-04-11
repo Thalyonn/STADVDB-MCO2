@@ -7,6 +7,11 @@ const dbController = {
     return await result;
   },
 
+  queryMovie: async function(id) {
+    const result = await db.selectOne(nodes.node_master, id);
+    return await result;
+  },
+
   insertMovie: function(name, year, rating, genre) {
     // if movie is released before 1980
     if (year < 1980) {

@@ -9,6 +9,18 @@ const controller = {
     res.render('index', { success_msg, movies: result });
   },
 
+  viewMovie: function(req, res) {
+    const id = req.params.id;
+    db.queryMovie(id)
+      .then(result => {
+        console.log(result);
+        res.render('viewMovie', { movie: result });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
+
   insertMovie: function (req, res){
     res.render('insertMovie');
   },

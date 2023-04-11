@@ -22,6 +22,7 @@
       </div>
       <input type="text" class="form-control ">
     </div>
+    <a href="/create" class="btn btn-dark">Create</a>
 
   </div>
   
@@ -48,7 +49,8 @@
                 <td><%= movie.rating %></td>
                 <td><%= movie.genre %></td>
                 <td>
-                  <a href="" class="text-sucess"><i class="fas fa-book fa-lg mx-1"></i></a>
+                  <a href="/<%= movie.id %>" class="btn btn-secondary">View</a>
+                  <a href="/edit/<%= movie.id %>" class="btn btn-secondary">Edit</a>
                 </td>
 
               </tr>

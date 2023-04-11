@@ -34,6 +34,17 @@ const database = {
 		return result
 	},
 	*/
+	selectOne: async function(node, id) {
+		const promisePool = node.promise()
+		try {
+			await promisePool.query(start_transac)
+			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE id= " + id );
+			await promisePool.query("COMMIT")
+			return results[0];
+		} catch (e) {
+			console.error(e);
+		}
+	},
 
 	selectYearRange: async function(node, start, end) {
 		const promisePool = node.promise()
