@@ -6,6 +6,7 @@ const router = express.Router();
 router.get('/create', movieController.insertMovie);
 router.get('/', movieController.homeView);
 router.post('/create', movieController.insertMoviePost);
+router.get('/search', movieController.searchMovieByName);
 router.get('/:id', movieController.viewMovie);
 
 module.exports = router;

@@ -5,6 +5,10 @@
 <div class="container">
   <%- include("./partials/messages.ejs") %>
 
+  <form action="/search">
+    <input type="text" name="name" class="form-control" required>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
   <div class="col-lg-7 d-flex flex-row mt-5">
     <div class="input-group-prepend">
       <span class="input-group-text" id="">Date Range:</span>

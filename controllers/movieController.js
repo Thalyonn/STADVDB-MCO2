@@ -11,14 +11,27 @@ const controller = {
 
   viewMovie: function(req, res) {
     const id = req.params.id;
-    db.queryMovie(id)
+    db.queryMovieById(id)
       .then(result => {
-        console.log(result);
         res.render('viewMovie', { movie: result });
       })
       .catch(err => {
         console.log(err);
       });
+  },
+
+  searchMovieByName: function(req, res) {
+    const name = req.query.name;
+    const success_msg = req.flash('success_msg');
+    console.log("name ============================================================ " + name);
+    db.queryMovieByName(name)
+      .then(result => {
+        console.log(result);
+        res.render('index', { success_msg, movies: result });
+      })
+      .catch(err => {
+        console.log(err);
+      })
   },
 
   insertMovie: function (req, res){

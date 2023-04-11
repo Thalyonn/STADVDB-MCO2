@@ -7,8 +7,13 @@ const dbController = {
     return await result;
   },
 
-  queryMovie: async function(id) {
-    const result = await db.selectOne(nodes.node_master, id);
+  queryMovieById: async function(id) {
+    const result = await db.selectOneById(nodes.node_master, id);
+    return await result;
+  },
+
+  queryMovieByName: async function(name) {
+    const result = await db.selectOneByName(nodes.node_master, name);
     return await result;
   },
 

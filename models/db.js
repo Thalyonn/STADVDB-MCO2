@@ -18,7 +18,7 @@ const database = {
 		const promisePool = node.promise();
 		try {
 			await promisePool.query(start_transac);
-			const [results, fields] = await promisePool.query("SELECT * FROM node LIMIT 10")
+			const [results, fields] = await promisePool.query("SELECT * FROM node LIMIT 20")
 			await promisePool.query("COMMIT");
 			return results;
 		} catch (e) {
@@ -34,13 +34,25 @@ const database = {
 		return result
 	},
 	*/
-	selectOne: async function(node, id) {
+	selectOneById: async function(node, id) {
 		const promisePool = node.promise()
 		try {
 			await promisePool.query(start_transac)
 			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE id= " + id );
 			await promisePool.query("COMMIT")
 			return results[0];
+		} catch (e) {
+			console.error(e);
+		}
+	},
+
+	selectOneByName: async function(node, name) {
+		const promisePool = node.promise()
+		try {
+			await promisePool.query(start_transac)
+			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE name = ?", name);
+			await promisePool.query("COMMIT")
+			return results;
 		} catch (e) {
 			console.error(e);
 		}
