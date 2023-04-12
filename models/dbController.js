@@ -29,6 +29,11 @@ const dbController = {
       db.insertOne(nodes.node_master, name, year, rating, genre);
       db.insertOne(nodes.node_slave1, name, year, rating, genre);
     }
+  },
+
+  updateMovieById: function(id, name, year, rating, genre) {
+    // if movie is released before 1980 has been changed to after 1980 
+    db.updateOneById(nodes.node_master, id, name, year, rating, genre);
   }
 };
 

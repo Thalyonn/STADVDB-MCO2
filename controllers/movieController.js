@@ -23,7 +23,6 @@ const controller = {
   searchMovieByName: function(req, res) {
     const name = req.query.name;
     const success_msg = req.flash('success_msg');
-    console.log("name ============================================================ " + name);
     db.queryMovieByName(name)
       .then(result => {
         console.log(result);
@@ -49,6 +48,30 @@ const controller = {
 
     db.insertMovie(name, year, rating, genre);
     req.flash('success_msg', 'Movie successfully created!');
+    res.redirect('/');
+  },
+
+  updateMovie: function(req, res) {
+    const id = req.params.id;
+    db.queryMovieById(id)
+      .then(result => {
+        res.render('updateMovie', { movie: result });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
+
+  updateMoviePut: function(req, res) {
+    const id = req.params.id;
+    const name = req.body.name;
+    const year = req.body.year;
+    const rating = req.body.rating;
+    const genre = req.body.genre;
+
+    console.log(id + name + year + rating + genre);
+    db.updateMovieById(id, name, year, rating, genre);
+    req.flash('success_msg', 'Movie successfully updated!');
     res.redirect('/');
   }
 }

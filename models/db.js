@@ -82,11 +82,12 @@ const database = {
 		}
 	},
 
-	updateOne: async function(node, id, field, value) {
+	updateOneById: async function(node, id, name, year, rating, genre) {
 		const promisePool = node.promise()
 		try {
 			await promisePool.query(start_transac)
-			const [results, fields] = await promisePool.query("UPDATE node SET '" + field + "' = '" + value + "' WHERE id = " + id)
+			// const [results, fields] = await promisePool.query("UPDATE node SET '" + field + "' = '" + value + "' WHERE id = " + id)
+			const [results, fields] = await promisePool.query("UPDATE node SET name=?, year=?, rating=?, genre=? WHERE id=?", [name, year, rating, genre, id])
 			console.log(results.affectedRows + " row(s) updated");
 			await promisePool.query("COMMIT")
 		} catch (e) {
