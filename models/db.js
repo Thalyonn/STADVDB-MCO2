@@ -58,16 +58,16 @@ const database = {
 		}
 	},
 
-	selectYearRange: async function(node, start, end) {
+	generateReportByYearRange: async function(node, start, end) {
 		const promisePool = node.promise()
 		try {
 			await promisePool.query(start_transac);
-			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE year BETWEEN " + start + " AND " + end)
+			const [results, fields] = await promisePool.query("SELECT COUNT(m.id) AS count, genre, ROUND(AVG(m.rating), 1) as avg_rating, year FROM node m WHERE year BETWEEN ? AND ? GROUP BY genre, year", [start, end]);
 			await promisePool.query("COMMIT");
+			return results;
 		} catch (e) {;
 			console.error(e);
 		}
-		return results;
 	},
 
 	insertOne: async function(node, name, year, rating, genres) {

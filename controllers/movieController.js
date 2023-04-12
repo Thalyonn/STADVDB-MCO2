@@ -73,6 +73,25 @@ const controller = {
     db.updateMovieById(id, name, year, rating, genre);
     req.flash('success_msg', 'Movie successfully updated!');
     res.redirect('/');
+  },
+
+  viewReports: function(req, res) {
+    const result = [];
+    res.render('viewReport', { movies: result });
+  },
+
+  generateReport: function(req, res) {
+    const start = parseInt(req.query.start);
+    const end = parseInt(req.query.end);
+
+    console.log(start + end);
+    db.generateReportByYearRange(start, end)
+      .then(result => {
+        res.render('viewReport', { movies: result });
+      })
+      .catch (err => {
+        console.log(err);
+      });
   }
 }
 module.exports = controller

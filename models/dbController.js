@@ -34,6 +34,11 @@ const dbController = {
   updateMovieById: function(id, name, year, rating, genre) {
     // if movie is released before 1980 has been changed to after 1980 
     db.updateOneById(nodes.node_master, id, name, year, rating, genre);
+  },
+
+  generateReportByYearRange: async function(start, end) {
+    const result = await db.generateReportByYearRange(nodes.node_master, start, end);
+    return await result;
   }
 };
 

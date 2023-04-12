@@ -1,0 +1,58 @@
+<header>
+  <h1 class="text-center">Movie Reports</h1>
+</header>
+
+<div class="container">
+
+  <form action="/generate_report">
+  <div class="col-lg-7 d-flex flex-row mt-5">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="">Date Range:</span>
+    </div>
+    <div class="input-group px-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">From</span>
+      </div>
+      <input type="text" name="start" class="form-control">
+    </div>
+    
+    <div class="input-group px-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="">To</span>
+      </div>
+      <input type="text" name="end" class="form-control ">
+    </div>
+    <button type="submit" class="btn btn-secondary">Generate</button>
+  </form>
+  </div>
+  
+
+  <div class="row my-4">
+    <div class="col-lg-12 ">
+      <div class="table-responsive">
+        <table class="table table-stripped text-center">
+          <thead>
+            <tr class="table-dark">
+              <th scope="col">Number of Movies</th>
+              <th scope="col">Genre</th>
+              <th scope="col">Average Rating</th>
+              <th scope="col">Year</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr class="">
+            <% if (movies.length > 0) { %>
+              <% movies.forEach(movie => { %>
+                <td><%= movie.count %></td>
+                <td><%= movie.genre %></td>
+                <td><%= movie.avg_rating %></td>
+                <td><%= movie.year %></td>
+              </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
