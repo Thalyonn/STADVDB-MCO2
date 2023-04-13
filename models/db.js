@@ -3,17 +3,6 @@ mysql = require("mysql2");
 const start_transac = "BEGIN"
 
 const database = {
-	/*
-	connect: function() {
-		node.connect((err) => {
-			if(err){
-				throw err;
-			}
-			console.log('MySql connected');
-		});
-	},
-	*/ 
-
 	selectAll: async function(node) { //Where "node" is a mysql2 connectionPool
 		const promisePool = node.promise();
 		try {
@@ -26,14 +15,6 @@ const database = {
 		}
 	},
 
-	/*
-	selectMovie: async function(node){
-		const promisePool = node.promise();
-		const [result,field ] = await promisePool.query("SELECT * FROM node");
-		console.log(result)
-		return result
-	},
-	*/
 	selectOneById: async function(node, id) {
 		const promisePool = node.promise()
 		try {
@@ -70,12 +51,29 @@ const database = {
 		}
 	},
 
-	insertOne: async function(node, name, year, rating, genres) {
+	insertOne: async function(node, name, year, rating, genre) {
 		const promisePool = node.promise()
 		try {
 			await promisePool.query(start_transac);
-			await promisePool.query("INSERT INTO node (name, year, rating, genre) VALUES ('" + name + "', '" + year + "', '" + rating + "', '" + genres + "')")
+			const result = await promisePool.query("INSERT INTO node (name, year, rating, genre) VALUES (?, ?, ?, ?)", [name, year, rating, genre]);
 			console.log("Inserted a row");
+			console.log(result[0]);
+			await promisePool.query("COMMIT");
+			console.log("insert id " + result[0].insertId);
+			console.log("type " + typeof result[0].insertId);
+			return result[0].insertId;
+		} catch (e) {
+			console.error(e);
+		}
+	},
+
+	insertOneWithId: async function(node, id, name, year, rating, genre) {
+		const promisePool = node.promise()
+		try {
+			await promisePool.query(start_transac);
+			const results = await promisePool.query("INSERT INTO node (id, name, year, rating, genre) VALUES (?, ?, ?, ?, ?)", [id, name, year, rating, genre]);
+			console.log("Inserted a row");
+			// console.log(results);
 			await promisePool.query("COMMIT");
 		} catch (e) {
 			console.error(e);
@@ -93,12 +91,24 @@ const database = {
 		} catch (e) {
 			console.error(e);
 		}
-
 	},
 
 	rollback: function(node) {
 		node.query("ROLLBACK")
-	}
+	},
+
+	deleteOneById: async function(node, id) {
+		const promisePool = node.promise()
+		try {
+			await promisePool.query(start_transac)
+			// const [results, fields] = await promisePool.query("UPDATE node SET '" + field + "' = '" + value + "' WHERE id = " + id)
+			const [results, fields] = await promisePool.query("DELETE FROM node WHERE id = ?", id);
+			console.log(results.affectedRows + " row(s) deleted");
+			await promisePool.query("COMMIT")
+		} catch (e) {
+			console.error(e);
+		}
+	},
 }
 
 module.exports = database;
