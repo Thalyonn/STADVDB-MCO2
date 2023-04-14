@@ -19,7 +19,7 @@ const database = {
 		const promisePool = node.promise()
 		try {
 			await promisePool.query(start_transac)
-			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE id= " + id );
+			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE id = ?", id);
 			await promisePool.query("COMMIT")
 			return results[0];
 		} catch (e) {
@@ -109,6 +109,28 @@ const database = {
 			console.error(e);
 		}
 	},
+
+  setIsolationLevel: async function(node, isoLevel) {
+    const promisePool = node.promise();
+    try {
+      await promisePool.query(`SET SESSION TRANSACTION ISOLATION LEVEL ${isoLevel}`);
+      await promisePool.query("SET autocommit = 0");
+      const fields = await promisePool.query("SELECT @@transaction_ISOLATION AS transaction_ISOLATION");
+      return await fields[0][0].transaction_ISOLATION;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  selectIsolationLevel: async function(node) {
+    const promisePool = node.promise();
+    try {
+      const fields = await promisePool.query("SELECT @@transaction_ISOLATION AS transaction_ISOLATION");
+      return await fields[0][0].transaction_ISOLATION;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 module.exports = database;

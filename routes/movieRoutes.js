@@ -9,6 +9,7 @@ router.post('/create', movieController.insertMoviePost);
 router.get('/search', movieController.searchMovieByName);
 router.get('/reports', movieController.viewReports);
 router.get('/generate_report', movieController.generateReport);
+router.post('/set_isolevel', movieController.setIsolationLevel);
 
 
 router.get('/:id', movieController.viewMovie);

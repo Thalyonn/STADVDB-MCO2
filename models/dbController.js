@@ -52,6 +52,16 @@ const dbController = {
     const result = await db.generateReportByYearRange(nodes.node_master, start, end);
     return await result;
   },
+
+  setIsolationLevel: async function(isoLevel) {
+    const result = await db.setIsolationLevel(nodes.node_master, isoLevel);
+    return await result;
+  },
+
+  selectIsolationLevel: async function(isoLevel) {
+    const result = await db.selectIsolationLevel(nodes.node_master, isoLevel);
+    return await result;
+  },
 };
 
 module.exports = dbController;

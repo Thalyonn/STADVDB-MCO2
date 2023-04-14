@@ -6,7 +6,8 @@ const controller = {
   homeView: async function (req, res) {
     const success_msg = req.flash('success_msg');
     const result = await db.queryAllMovies();
-    res.render('index', { success_msg, movies: result });
+    const currIsoLevel = await db.selectIsolationLevel();
+    res.render('index', { success_msg, movies: result, currIsoLevel});
   },
 
   viewMovie: function(req, res) {
@@ -91,6 +92,19 @@ const controller = {
       })
       .catch (err => {
         console.log(err);
+      });
+  },
+
+  setIsolationLevel: function(req, res) {
+    const isoLevel = req.body.iso_level;
+    db.setIsolationLevel(isoLevel)
+      .then(result => {
+        req.flash('success_msg', `Isolation level ${result} has been set!`);
+        res.redirect('/');
+      })
+      .catch(err => {
+        console.log(err);
+
       });
   }
 }
