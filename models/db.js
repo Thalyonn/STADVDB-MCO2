@@ -20,7 +20,8 @@ const database = {
 		try {
 			await promisePool.query(start_transac)
 			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE id = ?", id);
-			await promisePool.query("COMMIT")
+      await promisePool.query("DO SLEEP(10)");
+			await promisePool.query("COMMIT");
 			return results[0];
 		} catch (e) {
 			console.error(e);
@@ -30,9 +31,9 @@ const database = {
 	selectOneByName: async function(node, name) {
 		const promisePool = node.promise()
 		try {
-			await promisePool.query(start_transac)
+			await promisePool.query(start_transac);
 			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE name = ?", name);
-			await promisePool.query("COMMIT")
+			await promisePool.query("COMMIT");
 			return results;
 		} catch (e) {
 			console.error(e);
@@ -56,6 +57,7 @@ const database = {
 		try {
 			await promisePool.query(start_transac);
 			const result = await promisePool.query("INSERT INTO node (name, year, rating, genre) VALUES (?, ?, ?, ?)", [name, year, rating, genre]);
+      await promisePool.query("DO SLEEP(20)");
 			console.log("Inserted a row");
 			console.log(result[0]);
 			await promisePool.query("COMMIT");
@@ -83,11 +85,11 @@ const database = {
 	updateOneById: async function(node, id, name, year, rating, genre) {
 		const promisePool = node.promise()
 		try {
-			await promisePool.query(start_transac)
+			await promisePool.query(start_transac);
 			// const [results, fields] = await promisePool.query("UPDATE node SET '" + field + "' = '" + value + "' WHERE id = " + id)
 			const [results, fields] = await promisePool.query("UPDATE node SET name=?, year=?, rating=?, genre=? WHERE id=?", [name, year, rating, genre, id])
 			console.log(results.affectedRows + " row(s) updated");
-			await promisePool.query("COMMIT")
+			await promisePool.query("COMMIT");
 		} catch (e) {
 			console.error(e);
 		}
@@ -100,11 +102,11 @@ const database = {
 	deleteOneById: async function(node, id) {
 		const promisePool = node.promise()
 		try {
-			await promisePool.query(start_transac)
+			await promisePool.query(start_transac);
 			// const [results, fields] = await promisePool.query("UPDATE node SET '" + field + "' = '" + value + "' WHERE id = " + id)
 			const [results, fields] = await promisePool.query("DELETE FROM node WHERE id = ?", id);
 			console.log(results.affectedRows + " row(s) deleted");
-			await promisePool.query("COMMIT")
+			await promisePool.query("COMMIT");
 		} catch (e) {
 			console.error(e);
 		}
