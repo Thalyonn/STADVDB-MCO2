@@ -42,7 +42,10 @@ const dbController = {
 	  if (oldYear >= 1980) {
 		  await db.insertOneWithId(nodes.node_slave1, id, name, year, rating, genre);
 		  await db.deleteOneById(nodes.node_slave2, id);
-		}
+	  }
+	  else {
+          await db.updateOneById(nodes.node_slave1, id, name, year, rating, genre);
+	  }
     }
     else {
       // insert to slave node 2 and delete from slave node 1
@@ -51,6 +54,9 @@ const dbController = {
 	  if (oldYear < 1980) {
 		  await db.insertOneWithId(nodes.node_slave2, id, name, year, rating, genre);
 		  await db.deleteOneById(nodes.node_slave1, id);
+	  }
+	  else {
+          await db.updateOneById(nodes.node_slave2, id, name, year, rating, genre);
 	  }
     }
     // db.updateOneById(nodes.node_master, id, name, year, rating, genre);
