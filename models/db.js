@@ -20,7 +20,7 @@ const database = {
 		try {
 			await promisePool.query(start_transac)
 			const [results, fields] = await promisePool.query("SELECT * FROM node WHERE id = ?", id);
-      await promisePool.query("DO SLEEP(10)");
+      await promisePool.query("DO SLEEP(5)");
 			await promisePool.query("COMMIT");
 			return results[0];
 		} catch (e) {

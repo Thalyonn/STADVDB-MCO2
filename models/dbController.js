@@ -31,19 +31,19 @@ const dbController = {
     }
   },
 
-  updateMovieById: function(id, name, year, rating, genre) {
+  updateMovieById: async function(id, name, year, rating, genre) {
     // if movie is released before 1980 has been changed to after 1980 
     if (year < 1980) {
       // insert to slave node 1 and delete from slave node 2
-      db.updateOneById(nodes.node_master, id, name, year, rating, genre);
-      db.insertOneWithId(nodes.node_slave1, id, name, year, rating, genre);
-      db.deleteOneById(nodes.node_slave2, id);
+      await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
+      await db.insertOneWithId(nodes.node_slave1, id, name, year, rating, genre);
+      await db.deleteOneById(nodes.node_slave2, id);
     }
     else {
       // insert to slave node 2 and delete from slave node 1
-      db.updateOneById(nodes.node_master, id, name, year, rating, genre);
-      db.insertOneWithId(nodes.node_slave2, id, name, year, rating, genre);
-      db.deleteOneById(nodes.node_slave1, id);
+      await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
+      await db.insertOneWithId(nodes.node_slave2, id, name, year, rating, genre);
+      await db.deleteOneById(nodes.node_slave1, id);
     }
     // db.updateOneById(nodes.node_master, id, name, year, rating, genre);
   },
