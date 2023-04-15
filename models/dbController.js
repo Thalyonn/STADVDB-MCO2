@@ -32,18 +32,26 @@ const dbController = {
   },
 
   updateMovieById: async function(id, name, year, rating, genre) {
-    // if movie is released before 1980 has been changed to after 1980 
+	// check if movie is going to end up in its own node
+	movie = db.selectOneById(nodes.node_master, id)
+	oldYear = movie.year
     if (year < 1980) {
       // insert to slave node 1 and delete from slave node 2
       await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
-      await db.insertOneWithId(nodes.node_slave1, id, name, year, rating, genre);
-      await db.deleteOneById(nodes.node_slave2, id);
+	  // if movie is going to end up moving to a different slave, handle it
+	  if (oldYear >= 1980) {
+		  await db.insertOneWithId(nodes.node_slave1, id, name, year, rating, genre);
+		  await db.deleteOneById(nodes.node_slave2, id);
+		}
     }
     else {
       // insert to slave node 2 and delete from slave node 1
       await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
-      await db.insertOneWithId(nodes.node_slave2, id, name, year, rating, genre);
-      await db.deleteOneById(nodes.node_slave1, id);
+      // if movie is going to end up moving to a different slave, handle it
+	  if (oldYear < 1980) {
+		  await db.insertOneWithId(nodes.node_slave2, id, name, year, rating, genre);
+		  await db.deleteOneById(nodes.node_slave1, id);
+	  }
     }
     // db.updateOneById(nodes.node_master, id, name, year, rating, genre);
   },
