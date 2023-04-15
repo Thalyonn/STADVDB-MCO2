@@ -84,9 +84,14 @@ const controller = {
     const genre = req.body.genre;
 
     console.log(id + name + year + rating + genre);
-    db.updateMovieById(id, name, year, rating, genre);
-    req.flash('success_msg', 'Movie successfully updated!');
-    res.redirect('/');
+    db.updateMovieById(id, name, year, rating, genre)
+      .then(result => {
+        req.flash('success_msg', 'Movie successfully updated!');
+        res.redirect('/');
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
 
   viewReports: function(req, res) {
