@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS logs;
 
-CREATE TABLE logs.log (
+CREATE TABLE logs.log_after1980 (
 	transaction_id int NOT NULL AUTO_INCREMENT,
 	transaction_date DATETIME DEFAULT NULL,
 	action VARCHAR(50) DEFAULT NULL,
@@ -12,21 +12,21 @@ CREATE TABLE logs.log (
     PRIMARY KEY (transaction_id)
 )
 
-USE node_all;
+USE node_after1980;
 DELIMITER $$
 CREATE TRIGGER movie_insert 
     AFTER INSERT 
-    ON node_all.node FOR EACH ROW 
+    ON node_after1980.node FOR EACH ROW 
 BEGIN
- INSERT INTO logs.log(transaction_date, action, row_id, name, year, rating, genre) 
+ INSERT INTO logs.log_after1980(transaction_date, action, row_id, name, year, rating, genre) 
  VALUES (NOW(), "INSERT", NEW.id, NEW.name, NEW.year, NEW.rating, NEW.genre);
 END$$
 DELIMITER ;
 
 CREATE TRIGGER movie_update 
-    AFTER UPDATE ON node_all.node
+    AFTER UPDATE ON node_after1980.node
     FOR EACH ROW 
- INSERT INTO logs.log
+ INSERT INTO logs.log_after1980
  SET 	transaction_date=NOW(),
 		action = "UPDATE",
         row_id = NEW.id,
