@@ -33,10 +33,10 @@ const dbController = {
   
   updateMovieById: async function(id, name, year, rating, genre) {
     if (year < 1980) {
-      // await db.selectOneById(nodes.node_slave2, id)
-      // await db.selectOneById(nodes.node_slave1, id)
       await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
-      if (await db.selectOneById(nodes.node_slave2, id)) {
+
+      // if undefined (row does not exist) go to else statement, undefined is equal to false
+      if (await db.selectOneById(nodes.node_slave2, id)) { 
         await db.insertOneWithId(nodes.node_slave1, id, name, year, rating, genre);
         await db.deleteOneById(nodes.node_slave2, id); 
       }
@@ -48,6 +48,8 @@ const dbController = {
     else {
 
       await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
+
+      // if undefined (row does not exist) go to else statement, undefined is equal to false
       if (await db.selectOneById(nodes.node_slave1, id)) {
         await db.insertOneWithId(nodes.node_slave2, id, name, year, rating, genre);
         await db.deleteOneById(nodes.node_slave1, id);
