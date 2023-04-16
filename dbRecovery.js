@@ -56,40 +56,44 @@ const node_slave2 = mysql.createConnection({
 		console.log("Backlog from node 1: " + log1_results);
 		[log2_results, log2_fields] = await promisePool2.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
 		console.log("Backlog from node 2: " + log2_results);
+		//store in a logs array for later
 		logs = [log1_results, log2_results]
-		logs.forEach((current_log) => {
-			current_log.forEach((entry) => {
-				if (entry.action === "UPDATE") {
-					try {
-						await promisePool.query(start_transac);
-						const [results, fields] = await promisePool.query("UPDATE node SET name=?, year=?, rating=?, genre=? WHERE id=?", [entry.name, entry.year, entry.rating, entry.genre, entry.row_id])
-						  // await promisePool.query("DO SLEEP(10)");
-						console.log(results.affectedRows + " row(s) updated from log");
-						await promisePool.query("COMMIT");
-					} catch (e) {
-						console.error(e);
-					}
-				}
-				if (entry.action === "INSERT" {
-					try {
-						await promisePool.query(start_transac);
-						const results = await promisePool.query("INSERT INTO node (id, name, year, rating, genre) VALUES (?, ?, ?, ?, ?)", [entry.row_id, entry.name, entry.year, entry.rating, entry.genre]);
-						console.log("Inserted a row from log");
-						// console.log(results);
-						await promisePool.query("COMMIT");
-					} catch (e) {
-						console.error(e);
-					}
-				}
-			})
-		})
 	}
 	//if not master node, just grab the transac info from master
 	else {
 		promisePool0 = node_master.promise()
 		[log_results, log_fields] = await promisePool0.query("SELECT * from log ORDER BY transaction_date DESC")
 		console.log("Log from node 0: " + log_results)
+		//store in a logs array for later...
+		logs = [log_results]
 	}
+	//so I don't have to violate DRY
+	logs.forEach((current_log) => {
+		current_log.forEach((entry) => {
+			if (entry.action === "UPDATE") {
+				try {
+					await promisePool.query(start_transac);
+					const [results, fields] = await promisePool.query("UPDATE node SET name=?, year=?, rating=?, genre=? WHERE id=?", [entry.name, entry.year, entry.rating, entry.genre, entry.row_id])
+					  // await promisePool.query("DO SLEEP(10)");
+					console.log(results.affectedRows + " row(s) updated from log");
+					await promisePool.query("COMMIT");
+				} catch (e) {
+					console.error(e);
+				}
+			}
+			if (entry.action === "INSERT" {
+				try {
+					await promisePool.query(start_transac);
+					const results = await promisePool.query("INSERT INTO node (id, name, year, rating, genre) VALUES (?, ?, ?, ?, ?)", [entry.row_id, entry.name, entry.year, entry.rating, entry.genre]);
+					console.log("Inserted a row from log");
+					// console.log(results);
+					await promisePool.query("COMMIT");
+				} catch (e) {
+					console.error(e);
+				}
+			}
+		})
+	})
 }
 
 
