@@ -10,7 +10,7 @@ CREATE TABLE logs.log_before1980 (
 	rating FLOAT,
 	genre VARCHAR(100),
     PRIMARY KEY (transaction_id)
-)
+);
 
 USE node_before1980;
 DELIMITER $$
