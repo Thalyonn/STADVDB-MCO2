@@ -1,7 +1,6 @@
 mysql = require("mysql2");
 require('dotenv').config()
 
-
 const node_master = mysql.createConnection({
 	host : process.env.SQL_HOST0,
 	user : process.env.SQL_USERNAME0,
@@ -98,7 +97,5 @@ const node_slave2 = mysql.createConnection({
 	})
 }
 
-
-recover(0);
 
 module.exports = recover;
