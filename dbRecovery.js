@@ -62,14 +62,16 @@ const node_slave2 = mysql.createConnection({
 	//if not master node, just grab the transac info from master
 	else {
 		promisePool0 = node_master.promise()
-		[log_results, log_fields] = await promisePool0.query("SELECT * from log ORDER BY transaction_date DESC")
+		[log_results, log_fields] = await promisePool0.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date DESC", [last_transaction_date])
 		console.log("Log from node 0: " + log_results)
 		//store in a logs array for later...
 		logs = [log_results]
 	}
 	//so I don't have to violate DRY
 	logs.forEach((current_log) => {
+		//iterate over each log entry
 		current_log.forEach((entry) => {
+			//do the usual SQL blah blah blah
 			if (entry.action === "UPDATE") {
 				try {
 					await promisePool.query(start_transac);
