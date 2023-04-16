@@ -59,8 +59,12 @@ const node_slave2 = mysql.createPool({
 		} catch (e) {
 			console.error(e);
 		}
+		allResult = allResult.sort((a, b) => {
+			if (a.transaction_date < b.transaction_date) {
+			  return -1;
+			}
+		  });
 		console.log(allResult)
-
 	}
 }
 
