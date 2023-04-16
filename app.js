@@ -7,7 +7,7 @@ const session = require('express-session');
 // const mysql = require('mysql2');
 const expressLayouts = require('express-ejs-layouts');
 const movieRoutes = require('./routes/movieRoutes');
-const recovery = require('./models/dbRecovery.js');
+const recover = require('./models/dbRecovery.js');
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
@@ -27,7 +27,7 @@ app.use(session({
 app.use(flash());
 
 //environment variable (don't forget to update .env)
-recovery.recover(process.env.MYNODENO)
+recover(process.env.NODENO)
 
 app.listen(process.env.PORT, () => {
     console.log("Server started on port "+ process.env.PORT);
