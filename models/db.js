@@ -116,10 +116,10 @@ const database = {
   setIsolationLevel: async function(node, isoLevel) {
     const promisePool = node.promise();
     try {
-      await promisePool.query(`SET GLOBAL TRANSACTION ISOLATION LEVEL ${isoLevel}`);
+      await promisePool.query(`SET SESSION TRANSACTION ISOLATION LEVEL ${isoLevel}`);
       await promisePool.query("SET autocommit = 0");
-      const fields = await promisePool.query("SELECT @@global.transaction_ISOLATION AS transaction_ISOLATION");
-			console.log("GLOBAL ISO LEVEL -- " + await fields[0][0].transaction_ISOLATION);
+      const fields = await promisePool.query("SELECT @@transaction_ISOLATION AS transaction_ISOLATION");
+			console.log("ISO LEVEL -- " + await fields[0][0].transaction_ISOLATION);
       return await fields[0][0].transaction_ISOLATION;
     } catch (e) {
       console.log(e);
@@ -129,9 +129,9 @@ const database = {
   selectIsolationLevel: async function(node) {
     const promisePool = node.promise();
     try {
-      const fields = await promisePool.query("SELECT @@global.transaction_ISOLATION AS transaction_ISOLATION");
+      const fields = await promisePool.query("SELECT @@transaction_ISOLATION AS transaction_ISOLATION");
 
-			console.log("GLOBAL ISO LEVEL -- " + await fields[0][0].transaction_ISOLATION);
+			console.log("ISO LEVEL -- " + await fields[0][0].transaction_ISOLATION);
       return await fields[0][0].transaction_ISOLATION;
     } catch (e) {
       console.log(e);
