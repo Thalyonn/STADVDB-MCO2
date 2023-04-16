@@ -37,7 +37,7 @@ const node_slave2 = mysql.createPool({
 	if (node_num == 0) {
 		/* TODO */
 		const allResult = []
-		const last_transaction_date = null
+		var last_transaction_date = null
 		const promisePool = node_master.promise()
 		try {
 			const [results, fields] = await promisePool.query("SELECT * from log ORDER BY transaction_date DESC LIMIT 1")
