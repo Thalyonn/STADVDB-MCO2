@@ -26,6 +26,7 @@ app.use(session({
 
 app.use(flash());
 
+
 app.listen(process.env.PORT, () => {
     console.log("Server started on port "+ process.env.PORT);
 });
