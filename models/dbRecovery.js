@@ -29,14 +29,12 @@ const node_slave2 = mysql.createConnection({
  * 2: Slave (after 1980)
  * */
 async function recover(node_num) {
-	if (node_num == 0) {
-		/* TODO */
-		const promisePool = node_master.promise()
-	}
-	else if (node_num == 1) {
+	let last_transaction_date;
+	promisePool = node_master.promise() //default, because otherwise scope bullshit happens
+	if (node_num == 1) {
 		const promisePool = node_slave1.promise()
 	}
-	else {
+	else if (node_num == 2) {
 		const promisePool = node_slave2.promise()
 	}
 	
@@ -51,48 +49,54 @@ async function recover(node_num) {
 	if (node_num == 0) {
 		promisePool1 = node_slave1.promise()
 		promisePool2 = node_slave2.promise()
-		[log1_results, log1_fields] = await promisePool1.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
+		const [log1_results, log1_fields] = await promisePool1.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
 		console.log("Backlog from node 1: " + log1_results);
-		[log2_results, log2_fields] = await promisePool2.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
+		const [log2_results, log2_fields] = await promisePool2.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
 		console.log("Backlog from node 2: " + log2_results);
 		//store in a logs array for later
-		logs = [log1_results, log2_results]
+		var logs = [log1_results, log2_results]
 	}
 	//if not master node, just grab the transac info from master
 	else {
 		promisePool0 = node_master.promise()
-		[log_results, log_fields] = await promisePool0.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date DESC", [last_transaction_date])
+		const [log_results, log_fields] = await promisePool0.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date DESC", [last_transaction_date])
 		console.log("Log from node 0: " + log_results)
 		//store in a logs array for later...
-		logs = [log_results]
+		var logs = [log_results]
 	}
 	//so I don't have to violate DRY
 	logs.forEach((current_log) => {
 		//iterate over each log entry
-		current_log.forEach((entry) => {
+		current_log.forEach(async (entry) => {
 			//do the usual SQL blah blah blah
+			await promisePool.query("BEGIN");
 			if (entry.action === "UPDATE") {
 				try {
-					await promisePool.query(start_transac);
 					const [results, fields] = await promisePool.query("UPDATE node SET name=?, year=?, rating=?, genre=? WHERE id=?", [entry.name, entry.year, entry.rating, entry.genre, entry.row_id])
 					  // await promisePool.query("DO SLEEP(10)");
 					console.log(results.affectedRows + " row(s) updated from log");
-					await promisePool.query("COMMIT");
 				} catch (e) {
 					console.error(e);
 				}
 			}
-			if (entry.action === "INSERT" {
+			if (entry.action === "INSERT") {
 				try {
-					await promisePool.query(start_transac);
 					const results = await promisePool.query("INSERT INTO node (id, name, year, rating, genre) VALUES (?, ?, ?, ?, ?)", [entry.row_id, entry.name, entry.year, entry.rating, entry.genre]);
 					console.log("Inserted a row from log");
 					// console.log(results);
-					await promisePool.query("COMMIT");
 				} catch (e) {
 					console.error(e);
 				}
 			}
+			if (entry.action === "DELETE") {
+				try {
+					await promisePool.query("DELETE FROM node WHERE id = ?", id);
+					console.log("Deleted a row from log");
+				} catch (e) {
+					console.error(e)
+				}
+			}
+				await promisePool.query("COMMIT");
 		})
 	})
 }
