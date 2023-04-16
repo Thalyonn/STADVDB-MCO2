@@ -40,13 +40,25 @@ const node_slave2 = mysql.createPool({
 		const promisePool = node_master.promise()
 		try {
 			const [results, fields] = await promisePool.query("SELECT * from log ORDER BY transaction_date DESC LIMIT 1")
-			console.log(results)
-			last_transaction_date = results[0].last_transaction_date
+			last_transaction_date = results[0].transaction_date
 		} catch (e) {
 			console.error(e);
 		}
-		
-
+		const promisePool1 = node_slave1.promise()
+		try {
+			const [results, fields] = await promisePool1.query("SELECT * from log_before1980 WHERE transaction_date >" + last_transaction_date)
+			allResult += results
+		} catch (e) {
+			console.error(e);
+		}
+		const promisePool2 = node_slave2.promise()
+		try {
+			const [results, fields] = await promisePool2.query("SELECT * from log_after1980 WHERE transaction_date > ", last_transaction_date)
+			allResult += results
+		} catch (e) {
+			console.error(e);
+		}
+		console.log(allResult)
 
 	}
 }
