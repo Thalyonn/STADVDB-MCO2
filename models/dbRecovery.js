@@ -28,20 +28,19 @@ const node_slave2 = mysql.createConnection({
  * 1: Slave (before 1980)
  * 2: Slave (after 1980)
  * */
- async function recover(node_num) {
+ function recover(node_num) {
 	if (node_num == 0) {
-		/* TODO */
-		const promisePool = node_master.promise()
+		const connection = node_master
 	}
 	else if (node_num == 1) {
-		const promisePool = node_slave1.promise()
+		const connection = node_slave1
 	}
 	else {
-		const promisePool = node_slave2.promise()
+		const connection = node_slave2
 	}
 	
 	try {
-		const [results, fields] = await promisePool.query("SELECT * from log ORDER BY transaction_date DESC LIMIT 1")
+		const [results, fields] = connection.query("SELECT * from log ORDER BY transaction_date DESC LIMIT 1")
 		console.log(results)
 		last_transaction_date = results[0].last_transaction_date
 	} catch (e) {
@@ -49,19 +48,19 @@ const node_slave2 = mysql.createConnection({
 	}
 	//request log from other nodes
 	if (node_num == 0) {
-		promisePool1 = node_slave1.promise()
-		promisePool2 = node_slave2.promise()
-		[log1_results, log1_fields] = await promisePool1.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
+		connection1 = node_slave1
+		connection2 = node_slave2
+		[log1_results, log1_fields] = connection1.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
 		console.log("Backlog from node 1: " + log1_results);
-		[log2_results, log2_fields] = await promisePool2.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
+		[log2_results, log2_fields] = connection2.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date ASC", [last_transaction_date])
 		console.log("Backlog from node 2: " + log2_results);
 		//store in a logs array for later
 		logs = [log1_results, log2_results]
 	}
 	//if not master node, just grab the transac info from master
 	else {
-		promisePool0 = node_master.promise()
-		[log_results, log_fields] = await promisePool0.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date DESC", [last_transaction_date])
+		connection0 = node_master
+		[log_results, log_fields] = connection0.query("SELECT * from log WHERE transaction_date > ? ORDER BY transaction_date DESC", [last_transaction_date])
 		console.log("Log from node 0: " + log_results)
 		//store in a logs array for later...
 		logs = [log_results]
@@ -71,28 +70,26 @@ const node_slave2 = mysql.createConnection({
 		//iterate over each log entry
 		current_log.forEach((entry) => {
 			//do the usual SQL blah blah blah
+			connection.query("BEGIN");
 			if (entry.action === "UPDATE") {
 				try {
-					await promisePool.query(start_transac);
-					const [results, fields] = await promisePool.query("UPDATE node SET name=?, year=?, rating=?, genre=? WHERE id=?", [entry.name, entry.year, entry.rating, entry.genre, entry.row_id])
+					const [entry_results, entry_fields] = connection.query("UPDATE node SET name=?, year=?, rating=?, genre=? WHERE id=?", [entry.name, entry.year, entry.rating, entry.genre, entry.row_id])
 					  // await promisePool.query("DO SLEEP(10)");
-					console.log(results.affectedRows + " row(s) updated from log");
-					await promisePool.query("COMMIT");
+					console.log(entry_results.affectedRows + " row(s) updated from log");
 				} catch (e) {
 					console.error(e);
 				}
 			}
 			if (entry.action === "INSERT" {
 				try {
-					await promisePool.query(start_transac);
-					const results = await promisePool.query("INSERT INTO node (id, name, year, rating, genre) VALUES (?, ?, ?, ?, ?)", [entry.row_id, entry.name, entry.year, entry.rating, entry.genre]);
+					const entry_results = connection.query("INSERT INTO node (id, name, year, rating, genre) VALUES (?, ?, ?, ?, ?)", [entry.row_id, entry.name, entry.year, entry.rating, entry.genre]);
 					console.log("Inserted a row from log");
 					// console.log(results);
-					await promisePool.query("COMMIT");
 				} catch (e) {
 					console.error(e);
 				}
 			}
+			connection.query("COMMIT");
 		})
 	})
 }
