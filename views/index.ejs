@@ -9,12 +9,31 @@
     <input type="text" name="name" class="form-control" placeholder="Search" required>
     <button type="submit" class="btn btn-primary">Search</button>
   </form>
+  <form action="/set_isolevel" method="POST" class="my-4">
+    <h4>Current isolation level: <%= currIsoLevel %></h4>
+    <div>
+      <input type="radio" name="iso_level" value="READ UNCOMMITTED" checked>
+      <label>Read uncommitted</label>
+    </div>  
+    <div>
+      <input type="radio" name="iso_level" value="READ COMMITTED">
+      <label>Read committed</label>
+    </div>
+    <div>
+      <input type="radio" name="iso_level" value="REPEATABLE READ">
+      <label>Repeatable read</label>
+    </div>
+    <div>
+      <input type="radio" name="iso_level" value="SERIALIZABLE">
+      <label>Serializable</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Set isolation level</button>
+  </form>
   <div class="col-lg-7 d-flex flex-row mt-5">
     <a href="/create" class="btn btn-dark">Create</a>
     <a href="/reports" class="btn btn-dark">Generate reports</a>
-  </div>
-  
 
+  </div>
   <div class="row my-4">
     <div class="col-lg-12 ">
       <div class="table-responsive">
