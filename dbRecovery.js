@@ -1,6 +1,6 @@
 mysql = require("mysql2");
 require('dotenv').config()
-db = require("./db.js")
+db = require("model/db.js")
 
 
 
