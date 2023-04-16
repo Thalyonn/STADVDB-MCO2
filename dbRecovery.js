@@ -1,5 +1,7 @@
 mysql = require("mysql2");
 require('dotenv').config()
+db = require("./db.js")
+
 
 
 const node_master = mysql.createPool({
@@ -65,6 +67,17 @@ const node_slave2 = mysql.createPool({
 			}
 		  });
 		console.log(allResult)
+		for(result in allResult){
+			if(result.action=="INSERT"){
+				await db.insertOneWithId(nodes.master, result.row_id, result.name, result.year, result.rating, result.genre);
+			}
+			else if (result.action=="UPDATE"){
+
+			}
+			else if (result.action=="DELETE"){
+
+			}
+		}
 	}
 }
 

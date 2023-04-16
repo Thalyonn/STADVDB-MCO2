@@ -34,3 +34,14 @@ CREATE TRIGGER movie_update
         year = NEW.year,
         rating = NEW.rating,
         genre = NEW.genre;
+
+CREATE TRIGGER movie_delete
+	AFTER DELETE ON node_after1980.node
+    FOR EACH ROW
+ INSERT INTO logs.log_after1980
+ SET 	transaction_date=NOW(),
+		action = "DELETE",
+        row_id = OLD.id,
+        year = OLD.year,
+        rating = OLD.rating,
+        genre = OLD.genre;
