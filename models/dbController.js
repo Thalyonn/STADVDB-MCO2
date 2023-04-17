@@ -21,7 +21,7 @@ const dbController = {
   },
 
   queryMovieById: async function(id) {
-    const result = await db.selectOneById(nodes.node_master, id);
+    let result = await db.selectOneById(nodes.node_master, id);
     if (!result) {
       //query from other nodes if master is down
       let result1 = await db.selectOneById(nodes.node_slave1, id);
@@ -34,7 +34,7 @@ const dbController = {
   },
 
   queryMovieByName: async function(name) {
-    const result = await db.selectOneByName(nodes.node_master, name);
+    let result = await db.selectOneByName(nodes.node_master, name);
     //query from other nodes if master is down
     if (!result) {
       let result1 = await db.selectOneByName(nodes.node_slave1, name);
