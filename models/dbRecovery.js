@@ -83,7 +83,7 @@ async function recover_node0(){
 			else if (result.action=="DELETE"){
 				if (result.year>=1980){
 					try {
-						let row = await db.selectOneById(node_slave2, id);
+						let row = await db.selectOneById(nodes.node_slave2, id);
 						await db.updateOneById(nodes.node_master, row.id, row.name, row.year, row.rating, row.genre);
 					} catch (e) {
 						console.error(e);
@@ -91,7 +91,7 @@ async function recover_node0(){
 				}
 				if (result.year<1980){
 					try {
-						row = await db.selectOneById(node_slave1, id);
+						row = await db.selectOneById(nodes.node_slave1, id);
 						await db.updateOneById(nodes.node_master, row.id, row.name, row.year, row.rating, row.genre);
 					} catch (e) {
 						console.error(e);
