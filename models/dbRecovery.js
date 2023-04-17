@@ -1,4 +1,5 @@
 mysql = require("mysql2");
+nodes = require("./nodes.js")
 db = require("./db.js")
 
 const node_master = mysql.createPool({
@@ -65,7 +66,7 @@ async function recover_node0(){
 		for(result in allResult){
 			if(result.action=="INSERT"){
 				try {
-					await db.insertOneWithId(node_master, result.row_id, result.name, result.year, result.rating, result.genre);
+					await db.insertOneWithId(nodes.node_master, result.row_id, result.name, result.year, result.rating, result.genre);
 				} catch (e) {
 					console.error(e);
 				}
@@ -73,7 +74,7 @@ async function recover_node0(){
 			}
 			else if (result.action=="UPDATE"){
 				try {
-					await db.updateOneById(node_master, result.id, result.name, result.year, result.rating, result.genre);
+					await db.updateOneById(nodes.node_master, result.id, result.name, result.year, result.rating, result.genre);
 				} catch (e) {
 					console.error(e);
 				}
@@ -83,7 +84,7 @@ async function recover_node0(){
 				if (result.year>=1980){
 					try {
 						let row = await db.selectOneById(node_slave2, id);
-						await db.updateOneById(node_master, row.id, row.name, row.year, row.rating, row.genre);
+						await db.updateOneById(nodes.node_master, row.id, row.name, row.year, row.rating, row.genre);
 					} catch (e) {
 						console.error(e);
 					}
@@ -91,7 +92,7 @@ async function recover_node0(){
 				if (result.year<1980){
 					try {
 						row = await db.selectOneById(node_slave1, id);
-						await db.updateOneById(node_master, row.id, row.name, row.year, row.rating, row.genre);
+						await db.updateOneById(nodes.node_master, row.id, row.name, row.year, row.rating, row.genre);
 					} catch (e) {
 						console.error(e);
 					}
@@ -126,7 +127,7 @@ async function recover_node1(){
 		for(result in allResult){
 			if(result.action=="INSERT"){
 				try {
-					await db.insertOneWithId(node_slave1, result.row_id, result.name, result.year, result.rating, result.genre);
+					await db.insertOneWithId(nodes.node_slave1, result.row_id, result.name, result.year, result.rating, result.genre);
 				} catch (e) {
 					console.error(e);
 				}
@@ -134,7 +135,7 @@ async function recover_node1(){
 			}
 			else if (result.action=="UPDATE"){
 				try {
-					await db.updateOneById(node_slave1, result.id, result.name, result.year, result.rating, result.genre);
+					await db.updateOneById(nodes.node_slave1, result.id, result.name, result.year, result.rating, result.genre);
 				} catch (e) {
 					console.error(e);
 				}
@@ -142,7 +143,7 @@ async function recover_node1(){
 			}
 			else if (result.action=="UPDATE-BEFORE1980"){
 				try {
-					await db.insertOneWithId(node_slave1, result.row_id, result.name, result.year, result.rating, result.genre);
+					await db.insertOneWithId(nodes.node_slave1, result.row_id, result.name, result.year, result.rating, result.genre);
 				} catch (e) {
 					console.error(e);
 				}
@@ -150,7 +151,7 @@ async function recover_node1(){
 			}
 			else if (result.action=="UPDATE-AFTER1980"){
 				try {
-					await db.deleteOneById(node_master, result.id);
+					await db.deleteOneById(nodes.node_master, result.id);
 				} catch (e) {
 					console.error(e);
 				}
@@ -185,7 +186,7 @@ async function recover_node2(){
 		for(result in allResult){
 			if(result.action=="INSERT"){
 				try {
-					await db.insertOneWithId(node_slave2, result.row_id, result.name, result.year, result.rating, result.genre);
+					await db.insertOneWithId(nodes.node_slave2, result.row_id, result.name, result.year, result.rating, result.genre);
 				} catch (e) {
 					console.error(e);
 				}
@@ -193,7 +194,7 @@ async function recover_node2(){
 			}
 			else if (result.action=="UPDATE"){
 				try {
-					await db.updateOneById(node_slave2, result.id, result.name, result.year, result.rating, result.genre);
+					await db.updateOneById(nodes.node_slave2, result.id, result.name, result.year, result.rating, result.genre);
 				} catch (e) {
 					console.error(e);
 				}
@@ -201,7 +202,7 @@ async function recover_node2(){
 			}
 			else if (result.action=="UPDATE-AFTER1980"){
 				try {
-					await db.insertOneWithId(node_slave1, result.row_id, result.name, result.year, result.rating, result.genre);
+					await db.insertOneWithId(nodes.node_slave1, result.row_id, result.name, result.year, result.rating, result.genre);
 				} catch (e) {
 					console.error(e);
 				}
@@ -209,7 +210,7 @@ async function recover_node2(){
 			}
 			else if (result.action=="UPDATE-BEFORE1980"){
 				try {
-					await db.deleteOneById(node_slave2, result.id);
+					await db.deleteOneById(node.node_slave2, result.id);
 				} catch (e) {
 					console.error(e);
 				}
