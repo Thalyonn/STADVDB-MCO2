@@ -54,7 +54,7 @@ const dbController = {
       masterAvailable = false;
       let node1_highestId = await db.getHighestId(nodes.node_slave1);
       let node2_highestId = await db.getHighestId(nodes.node_slave2);
-      lastInsertId = Math.max(node1_highest[0].id, node2_highest[0].id) + 1;
+      lastInsertId = Math.max(node1_highestId, node2_highestId) + 1;
 
       console.log("lastInsertId: " + lastInsertId)
     }
