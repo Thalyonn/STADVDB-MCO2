@@ -1,8 +1,5 @@
 mysql = require("mysql2");
-require('dotenv').config()
 db = require("model/db.js")
-
-
 
 const node_master = mysql.createPool({
 	connectionLimit: process.env.SQL_CONNLIMIT,
@@ -220,10 +217,9 @@ async function recover_node2(){
 			}
 		}
 }
- async function recover(node_num) {
-	//if not master, request the log from master
+
+async function recover(node_num) {
 	if (node_num == 0) {
-		/* TODO */
 		recover_node0();
 		
 	}
@@ -236,6 +232,5 @@ async function recover_node2(){
 }
 
 
-recover(0);
 
 module.exports = recover;
