@@ -52,17 +52,14 @@ const dbController = {
     //once again, if master is unavailable...
     if (!lastInsertId) {
       masterAvailable = false;
-      let result1 = await db.selectAll(nodes.node_slave1);
-      let result2 = await db.selectAll(nodes.node_slave2);
-      allResults = result1.concat(result2);
-      //sort the results in order of id ascending
-      allResults = allResults.sort((a, b) => {
-        if (a.id < b.id) {
-          return 1;
-        }
-      })
+      try {
+        node1_highestId = await nodes.node_slave1.query("SELECT id FROM node ORDER BY id DESC LIMIT 1");
+        node2_highestId = await nodes.node_slave2.query("SELECT id FROM node ORDER BY id DESC LIMIT 1");
+        lastInsertId = Math.max(node1_highest[0].id, node2_highest[0].id) + 1;
+      } catch (e) {
+        console.log(e)
+      }
 
-      lastInsertId = allResults[allResults.length - 1].id + 1;
       console.log("lastInsertId: " + lastInsertId)
     }
     // if movie is released before 1980
