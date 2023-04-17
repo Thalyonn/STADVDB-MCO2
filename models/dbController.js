@@ -3,17 +3,46 @@ db = require("./db.js")
 // performs routing of nodes depending on the year of the movie
 const dbController = {
   queryAllMovies: async function() {
-    const result = await db.selectAll(nodes.node_master);
+    let result = await db.selectAll(nodes.node_master);
+    if (!result) {
+      //pull from the other nodes if master is down
+      let result1 = await db.selectAll(nodes.node_slave1);
+      let result2 = await db.selectAll(nodes.node_slave2);
+      allResults = result1.concat(result2);
+      //sort the results in order
+      allResults = allResults.sort((a, b) => {
+        if (a.id < b.id) {
+          return -1;
+        }
+      })
+      result = allResults;
+    }
     return await result;
   },
 
   queryMovieById: async function(id) {
     const result = await db.selectOneById(nodes.node_master, id);
+    if (!result) {
+      //query from other nodes if master is down
+      let result1 = await db.selectOneById(nodes.node_slave1, id);
+      if (!result1) {
+        result1 = await db.selectOneById(nodes.node_slave2, id);
+      }
+      result = result1;
+    }
     return await result;
   },
 
   queryMovieByName: async function(name) {
     const result = await db.selectOneByName(nodes.node_master, name);
+    //query from other nodes if master is down
+    if (!result) {
+      let result1 = await db.selectOneByName(nodes.node_slave1, name);
+      if (!result1) {
+        result1 = await db.selectOneByName(nodes.node_slave2, name);
+      }
+      result = result1;
+    }
     return await result;
   },
 
