@@ -1,5 +1,5 @@
 mysql = require("mysql2");
-db = require("model/db.js")
+db = require("db.js")
 
 const node_master = mysql.createPool({
 	connectionLimit: process.env.SQL_CONNLIMIT,
