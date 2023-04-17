@@ -215,8 +215,8 @@ async function recover_node2(){
 					console.error(e);
 				}
 				
-			})
-		}
+			}
+		})
 }
 
 async function recover(node_num) {
