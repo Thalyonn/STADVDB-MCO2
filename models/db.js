@@ -12,6 +12,7 @@ const database = {
 			return results;
 		} catch (e) {
 			console.error(e);
+			return false;
 		}
 	},
 
@@ -25,6 +26,7 @@ const database = {
 			return await results[0];
 		} catch (e) {
 			console.error(e);
+			return false;
 		}
 	},
 
@@ -37,6 +39,7 @@ const database = {
 			return results;
 		} catch (e) {
 			console.error(e);
+			return false;
 		}
 	},
 
@@ -49,6 +52,7 @@ const database = {
 			return results;
 		} catch (e) {;
 			console.error(e);
+			return false;
 		}
 	},
 
@@ -66,6 +70,7 @@ const database = {
 			return result[0].insertId;
 		} catch (e) {
 			console.error(e);
+			return false;
 		}
 	},
 
@@ -79,6 +84,7 @@ const database = {
 			await promisePool.query("COMMIT");
 		} catch (e) {
 			console.error(e);
+			return false;
 		}
 	},
 
@@ -93,6 +99,7 @@ const database = {
 			await promisePool.query("COMMIT");
 		} catch (e) {
 			console.error(e);
+			return false;
 		}
 	},
 
