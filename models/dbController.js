@@ -47,24 +47,43 @@ const dbController = {
   },
 
   insertMovie: async function(name, year, rating, genre) {
+    let masterAvailable = true;
+    const lastInsertId = await db.insertOne(nodes.node_master, name, year, rating, genre);
+    //once again, if master is unavailable...
+    if (!lastInsertId) {
+      masterAvailable = false;
+      let result1 = await db.selectAll(nodes.node_slave1);
+      let result2 = await db.selectAll(nodes.node_slave2);
+      allResults = result1.concat(result2);
+      //sort the results in order
+      allResults = allResults.sort((a, b) => {
+        if (a.id < b.id) {
+          return -1;
+        }
+      })
+      lastInsertId = allResults[allResults.length - 1].id + 1;
+    }
     // if movie is released before 1980
     if (year < 1980) {
       // insert movie fields at master node and slave node 1
-      const lastInsertId = await db.insertOne(nodes.node_master, name, year, rating, genre);
       await db.insertOneWithId(nodes.node_slave1, lastInsertId, name, year, rating, genre);
     }
     else {
       // insert movie fields at master node and slave node 2
-      const lastInsertId = await db.insertOne(nodes.node_master, name, year, rating, genre);
       await db.insertOneWithId(nodes.node_slave2, lastInsertId, name, year, rating, genre);
     }
   },
   
   updateMovieById: async function(id, name, year, rating, genre) {
+    let masterAvailable = true;
+    updateId = await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
+    //if master is unavailable
+    if (!updateId) {
+      masterAvailable = false;
+    }
     if (year < 1980) {
       // await db.selectOneById(nodes.node_slave2, id)
       // await db.selectOneById(nodes.node_slave1, id)
-      await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
       if (await db.selectOneById(nodes.node_slave2, id)) {
         await db.insertOneWithId(nodes.node_slave1, id, name, year, rating, genre);
         await db.deleteOneById(nodes.node_slave2, id); 
@@ -76,7 +95,6 @@ const dbController = {
     }
     else {
 
-      await db.updateOneById(nodes.node_master, id, name, year, rating, genre);
       if (await db.selectOneById(nodes.node_slave1, id)) {
         await db.insertOneWithId(nodes.node_slave2, id, name, year, rating, genre);
         await db.deleteOneById(nodes.node_slave1, id);
