@@ -48,7 +48,7 @@ const dbController = {
 
   insertMovie: async function(name, year, rating, genre) {
     let masterAvailable = true;
-    const lastInsertId = await db.insertOne(nodes.node_master, name, year, rating, genre);
+    let lastInsertId = await db.insertOne(nodes.node_master, name, year, rating, genre);
     //once again, if master is unavailable...
     if (!lastInsertId) {
       masterAvailable = false;
