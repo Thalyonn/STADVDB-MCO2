@@ -57,7 +57,7 @@ const database = {
 		try {
 			await promisePool.query(start_transac);
 			const result = await promisePool.query("INSERT INTO node (name, year, rating, genre) VALUES (?, ?, ?, ?)", [name, year, rating, genre]);
-      // await promisePool.query("DO SLEEP(10)");
+            await promisePool.query("DO SLEEP(20)"); //For testing
 			console.log("Inserted a row");
 			console.log(result[0]);
 			await promisePool.query("COMMIT");
@@ -88,7 +88,7 @@ const database = {
 			await promisePool.query(start_transac);
 			// const [results, fields] = await promisePool.query("UPDATE node SET '" + field + "' = '" + value + "' WHERE id = " + id)
 			const [results, fields] = await promisePool.query("UPDATE node SET name=?, year=?, rating=?, genre=? WHERE id=?", [name, year, rating, genre, id])
-      // await promisePool.query("DO SLEEP(10)");
+            await promisePool.query("DO SLEEP(10)"); //For testing
 			console.log(results.affectedRows + " row(s) updated");
 			await promisePool.query("COMMIT");
 		} catch (e) {
