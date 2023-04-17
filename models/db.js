@@ -29,6 +29,16 @@ const database = {
 			return false;
 		}
 	},
+	getHighestId: async function(node) {
+		const promisePool = node.promise()
+		try {
+			const [results, fields] = await promisePool.query("SELECT * FROM node ORDER BY id DESC LIMIT 1");
+			return await results[0];
+		} catch (e) {
+			console.error(e);
+			return false;
+		}
+	},
 
 	selectOneByName: async function(node, name) {
 		const promisePool = node.promise()
