@@ -62,6 +62,7 @@ const dbController = {
         }
       })
       lastInsertId = allResults[allResults.length - 1].id + 1;
+      console.log("lastInsertId: " + lastInsertId)
     }
     // if movie is released before 1980
     if (year < 1980) {
