@@ -60,7 +60,7 @@ const dbController = {
         if (a.id < b.id) {
           return -1;
         }
-      )
+      })
       lastInsertId = allResults[allResults.length - 1].id + 1;
       console.log("lastInsertId: " + lastInsertId)
     }
