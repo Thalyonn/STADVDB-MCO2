@@ -70,6 +70,7 @@ const database = {
 			return result[0].insertId;
 		} catch (e) {
 			console.error(e);
+			console.log("InsertOne error, gonna throw false")
 			return false;
 		}
 	},
