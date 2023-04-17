@@ -63,7 +63,7 @@ async function recover_node0(){
 			}
 		  });
 		console.log(allResult)
-		for(result in allResult){
+		allResult.forEach(async (result) =>{
 			if(result.action=="INSERT"){
 				try {
 					await db.insertOneWithId(nodes.node_master, result.row_id, result.name, result.year, result.rating, result.genre);
@@ -98,7 +98,7 @@ async function recover_node0(){
 					}
 				}
 			}
-		}
+		})
 }
 
 async function recover_node1(){
@@ -124,7 +124,7 @@ async function recover_node1(){
 			}
 		  });
 		console.log(allResult)
-		for(result in allResult){
+		allResult.forEach(async (result) =>{
 			if(result.action=="INSERT"){
 				try {
 					await db.insertOneWithId(nodes.node_slave1, result.row_id, result.name, result.year, result.rating, result.genre);
@@ -157,7 +157,7 @@ async function recover_node1(){
 				}
 				
 			}
-		}
+		})
 }
 
 async function recover_node2(){
@@ -183,7 +183,7 @@ async function recover_node2(){
 			}
 		  });
 		console.log(allResult)
-		for(result in allResult){
+		allResult.forEach(async (result) => {
 			if(result.action=="INSERT"){
 				try {
 					await db.insertOneWithId(nodes.node_slave2, result.row_id, result.name, result.year, result.rating, result.genre);
@@ -215,7 +215,7 @@ async function recover_node2(){
 					console.error(e);
 				}
 				
-			}
+			})
 		}
 }
 
