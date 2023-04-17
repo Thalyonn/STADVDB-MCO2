@@ -33,7 +33,6 @@ const database = {
 		const promisePool = node.promise()
 		try {
 			const [results, fields] = await promisePool.query("SELECT id FROM node ORDER BY id DESC LIMIT 1");
-			console.log("fucking getHighestId: " + results)
 			return await results[0].id;
 		} catch (e) {
 			console.error(e);
