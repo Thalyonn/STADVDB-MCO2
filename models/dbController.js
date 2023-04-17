@@ -55,12 +55,12 @@ const dbController = {
       let result1 = await db.selectAll(nodes.node_slave1);
       let result2 = await db.selectAll(nodes.node_slave2);
       allResults = result1.concat(result2);
-      //sort the results in order
+      //sort the results in order of id descending
       allResults = allResults.sort((a, b) => {
         if (a.id < b.id) {
           return -1;
         }
-      })
+      )
       lastInsertId = allResults[allResults.length - 1].id + 1;
       console.log("lastInsertId: " + lastInsertId)
     }
