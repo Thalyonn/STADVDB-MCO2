@@ -57,7 +57,7 @@ const dbController = {
       allResults = result1.concat(result2);
       //sort the results in order of id descending
       allResults = allResults.sort((a, b) => {
-        if (a.id < b.id) {
+        if (a.id > b.id) {
           return -1;
         }
       })
