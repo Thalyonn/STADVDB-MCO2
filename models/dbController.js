@@ -52,8 +52,8 @@ const dbController = {
     //once again, if master is unavailable...
     if (!lastInsertId) {
       masterAvailable = false;
-      node1_highestId = await db.getHighestId(nodes.node_slave1);
-      node2_highestId = await db.getHighestId(nodes.node_slave2);
+      let node1_highestId = await db.getHighestId(nodes.node_slave1);
+      let node2_highestId = await db.getHighestId(nodes.node_slave2);
       lastInsertId = Math.max(node1_highest[0].id, node2_highest[0].id) + 1;
 
       console.log("lastInsertId: " + lastInsertId)
