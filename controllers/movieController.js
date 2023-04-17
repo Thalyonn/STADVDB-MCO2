@@ -1,9 +1,11 @@
 const movieDB = require("../models/db.js")
 const db = require('../models/dbController')
 const { isValidRating } = require('../helpers/validation')
+const recover = require('../models/dbRecovery.js')
 
 const controller = {
   homeView: async function (req, res) {
+    await recover(process.env.NODENO);
     const success_msg = req.flash('success_msg');
     const result = await db.queryAllMovies();
     const currIsoLevel = await db.selectIsolationLevel();
