@@ -105,7 +105,7 @@ async function recover_node1(){
 		var last_transaction_date = null
 		const promisePool = node_slave1.promise()
 		try {
-			const [results, fields] = await promisePool.query("SELECT * from log_pre1980 ORDER BY transaction_date DESC LIMIT 1")
+			const [results, fields] = await promisePool.query("SELECT * from log_before1980 ORDER BY transaction_date DESC LIMIT 1")
 			last_transaction_date = results[0].transaction_date
 		} catch (e) {
 			console.error(e);
@@ -164,7 +164,7 @@ async function recover_node2(){
 		var last_transaction_date = null
 		const promisePool = node_slave2.promise()
 		try {
-			const [results, fields] = await promisePool.query("SELECT * from log_pre1980 ORDER BY transaction_date DESC LIMIT 1")
+			const [results, fields] = await promisePool.query("SELECT * from log_after1980 ORDER BY transaction_date DESC LIMIT 1")
 			last_transaction_date = results[0].transaction_date
 		} catch (e) {
 			console.error(e);
